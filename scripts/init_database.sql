@@ -6,7 +6,6 @@
 -- 1. Raw_Layer: Store raw ingested data from external sources.
 -- 2. Staging_Layer: Clean, validate, and standardize the raw data.
 -- 3. Core_Layer: Create fact and dimension tables based on the staging data.
--- Additionally, an Analytics_Layer schema is created for BI purposes.
 -- =============================================================
 */
 -- Create the Data Warehouse Database
