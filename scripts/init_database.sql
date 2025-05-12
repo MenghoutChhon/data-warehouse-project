@@ -32,6 +32,3 @@ GO
 CREATE SCHEMA Core_Layer;
 GO
 
--- Create schema for analytics layer (BI views, KPIs, summaries)
-CREATE SCHEMA Analytics_Layer;
-GO
