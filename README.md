@@ -5,17 +5,6 @@ This project is part of my personal learning journey where I practice and streng
 
 ---
 
-## 📂 Project Structure
-sql-hands-on-project/
-│
-├── datasets/ # Practice datasets (ERP and CRM data)
-│
-├── docs/ # Notes, diagrams, and documentation
-│
-└── scripts/ # SQL scripts for queries and exercises
-
----
-
 ## 🛠️ Tools I Use
 
 - **[SQL Server Express]**
