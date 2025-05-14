@@ -1,3 +1,26 @@
+/*
+===============================================================================
+Stored Procedure: Staging_Layer.load_staging_layer
+===============================================================================
+Script Purpose:
+    This stored procedure performs the ETL (Extract, Transform, Load) process 
+    to populate the 'Staging_Layer' schema tables from the 'Raw_Layer' schema.
+
+Actions Performed:
+    - Truncates Staging_Layer tables.
+    - Inserts transformed and cleansed data from Raw_Layer into Staging_Layer tables.
+    - Applies standardization, deduplication, and data quality checks.
+
+Parameters:
+    None.
+    This stored procedure does not accept any parameters or return any values.
+
+Usage Example:
+    EXEC Staging_Layer.load_staging_layer;
+===============================================================================
+*/
+
+
 CREATE OR ALTER PROCEDURE Staging_Layer.load_staging_layer
 AS
 BEGIN
