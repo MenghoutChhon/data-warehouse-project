@@ -1,3 +1,25 @@
+/*
+===============================================================================
+DDL AND DML in Staging_Layer
+===============================================================================
+Script Purpose:
+    Perform data quality checks, standardization, and loading from Raw_Layer to Staging_Layer.
+
+Actions Performed:
+    - Data validation (nulls, invalid dates, unwanted spaces)
+    - Data standardization (trimming, value replacement, value mapping)
+    - Insert cleansed and transformed data into Staging Layer tables
+
+Parameters:
+    None
+
+Usage:
+    Apologies for any inconvenience — this SQL script may take some time to understand.
+    You might want to start executing from the line below the bulk insert statements,
+    then continue running from the bottom upward to the first line. 
+    I apologize for the slightly messy arrangement of DDL and DML statements.
+===============================================================================
+*/
 
  -- Check data Quality
 SELECT*FROM Staging_Layer.erp_px_cat_g1v2
