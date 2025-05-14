@@ -1,0 +1,80 @@
+/*
+===============================================================================
+Quality Checks
+===============================================================================
+Script Purpose:
+    This script performs various quality checks for data consistency, accuracy, 
+    and standardization across the 'Raw_Layer' and 'Staging_Layer'. It includes:
+    - Null or duplicate primary keys.
+    - Unwanted spaces in string fields.
+    - Data standardization and consistency.
+    - Invalid date ranges and orders.
+    - Data consistency between related fields.
+
+Usage Notes:
+    - Run these checks after data loading into each layer.
+    - Investigate and resolve any discrepancies found during the checks.
+===============================================================================
+*/
+
+-- Check for unwanted spaces in category, subcategory, and maintenance fields
+SELECT * 
+FROM Raw_Layer.erp_px_cat_g1v2
+WHERE cat != TRIM(cat) 
+   OR subcat != TRIM(subcat) 
+   OR maintenance != TRIM(maintenance);
+
+-- Check distinct values of 'maintenance' to identify inconsistencies
+SELECT DISTINCT maintenance
+FROM Raw_Layer.erp_px_cat_g1v2;
+
+-- Normalize and handle missing or blank country codes
+SELECT
+    REPLACE(cid, '-', '') AS cid,
+    CASE
+        WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+        WHEN TRIM(cntry) IN ('US', 'USA') THEN 'United States'
+        WHEN TRIM(cntry) = '' OR cntry IS NULL THEN 'n/a'
+        ELSE TRIM(cntry)
+    END AS cntry
+FROM Raw_Layer.erp_loc_a101;
+
+-- Check distinct country values after standardization
+SELECT DISTINCT cntry
+FROM Staging_Layer.erp_loc_a101
+ORDER BY cntry;
+
+-- Check for invalid gender or outliers and inconsistent gender labels
+SELECT DISTINCT gen
+FROM Raw_Layer.erp_cust_az12;
+
+-- Check for future birthdates or null issues
+SELECT *
+FROM Raw_Layer.erp_cust_az12
+WHERE bdate > GETDATE() 
+   OR bdate IS NULL;
+
+-- Check for invalid date orders in sales details
+SELECT *
+FROM Staging_Layer.crm_sales_details
+WHERE sls_order_dt > sls_ship_id 
+   OR sls_order_dt > sls_due_dt;
+
+-- Check for null or zero sales values and inconsistent calculation logic
+SELECT *
+FROM Staging_Layer.crm_sales_details
+WHERE sls_sales IS NULL 
+   OR sls_sales <= 0
+   OR sls_sales != sls_quantity * ABS(sls_price);
+
+-- Identify invalid date formats (should be 8 characters long INT, otherwise invalid)
+SELECT *
+FROM Raw_Layer.crm_sales_details
+WHERE LEN(CAST(sls_order_dt AS VARCHAR)) != 8
+   OR LEN(CAST(sls_due_dt AS VARCHAR)) != 8;
+
+-- Check for null, negative, or zero prices
+SELECT *
+FROM Raw_Layer.crm_sales_details
+WHERE sls_price IS NULL 
+   OR sls_price <= 0;
